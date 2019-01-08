@@ -17,6 +17,8 @@ import java.util.Random;
 public class Test {
     /***
      * 生成序列文件
+     * 产看方式：
+     * cmd-->hdfs dfs file:///文件完整路径
      * @throws IOException
      */
     public static void save() throws IOException {
