@@ -31,7 +31,7 @@ public class MaxTempApp {
         FileInputFormat.addInputPath(job,new Path(args[0]));
         FileOutputFormat.setOutputPath(job,new Path(args[1]));
 //          reduce个数
-        job.setNumReduceTasks(3);
+        job.setNumReduceTasks(1);
 
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
