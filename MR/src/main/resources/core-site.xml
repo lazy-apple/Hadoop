@@ -3,6 +3,6 @@
 <configuration>
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://s201/</value>
+        <value>file:///</value>
     </property>
 </configuration>
