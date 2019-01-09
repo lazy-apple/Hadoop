@@ -16,10 +16,29 @@ import java.sql.SQLException;
  * @data 2019/1/9 - 18:59
  */
 public class MyDBWritable implements DBWritable,Writable{
-    //数据库字段
-    public int id;
-    public String name;
-    public String txt;
+    //数据库words表字段
+    public int id = 0;
+    public String name = "";
+    public String txt = "";
+    //数据库stats表字段
+    private String word = "";
+    private int wordCount = 0;
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
+    }
 
     public int getId() {
         return id;
@@ -49,24 +68,26 @@ public class MyDBWritable implements DBWritable,Writable{
         dataOutput.writeInt(id);
         dataOutput.writeUTF(name);
         dataOutput.writeUTF(txt);
-    }
+        dataOutput.writeUTF(word);
+        dataOutput.writeInt(wordCount);
+        }
 
     public void readFields(DataInput dataInput) throws IOException {
         id = dataInput.readInt();
         name = dataInput.readUTF();
         txt = dataInput.readUTF();
+        word = dataInput.readUTF();
+        wordCount = dataInput.readInt();
     }
 
     public void write(PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1,id);
-        preparedStatement.setString(2,name);
-        preparedStatement.setString(3,txt);
+        preparedStatement.setString(1,word);
+        preparedStatement.setInt(2,wordCount);
     }
 
     public void readFields(ResultSet resultSet) throws SQLException {
         id = resultSet.getInt(1);
         name = resultSet.getString(2);
         txt = resultSet.getString(3);
-
     }
 }

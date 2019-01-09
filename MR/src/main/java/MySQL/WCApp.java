@@ -39,6 +39,7 @@ public class WCApp {
 
         //
         FileOutputFormat.setOutputPath(job,new Path("h:/mr/sql/out"));
+        //统计结果写入数据库中
 //        DBOutputFormat.setOutput(job,"stats","word","c");
 
         //设置分区类
