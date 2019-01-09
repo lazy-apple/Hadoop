@@ -15,7 +15,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.io.IOException;
 
 /**
- * 链式处理
+ * 链式处理：过滤敏感词
  * @author LaZY（李志一）
  * @data 2019/1/9 - 16:59
  */
