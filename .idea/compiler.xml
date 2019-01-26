@@ -15,7 +15,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Hadoop" target="1.5" />
-      <module name="HbaseDeemo" target="1.5" />
+      <module name="HbaseDeemo" target="6" />
       <module name="HDFS" target="1.5" />
       <module name="HIVE" target="1.5" />
       <module name="MR" target="1.5" />

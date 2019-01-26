@@ -1,6 +1,5 @@
 
 import org.apache.hadoop.conf.Configuration;
-import org.junit.Test;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -11,6 +10,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NavigableMap;
 
 /**
  * @author LaZY(李志一)
@@ -108,5 +108,157 @@ public class TestCRUD {
         DecimalFormat format = new DecimalFormat();
         format.applyLocalizedPattern("0000");
         return format;
+    }
+
+    @Test
+    public void createNameSpace() throws Exception {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        Admin admin = conn.getAdmin();
+        //创建名字空间描述符
+        NamespaceDescriptor nsd = NamespaceDescriptor.create("ns2").build();
+        admin.createNamespace(nsd);
+
+        NamespaceDescriptor[] ns = admin.listNamespaceDescriptors();
+        for(NamespaceDescriptor n : ns){
+            System.out.println(n.getName());
+        }
+    }
+    @Test
+    public void listNameSpaces() throws Exception {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        Admin admin = conn.getAdmin();
+
+        NamespaceDescriptor[] ns = admin.listNamespaceDescriptors();
+        for(NamespaceDescriptor n : ns){
+            System.out.println(n.getName());
+        }
+    }
+
+    @Test
+    public void createTable() throws Exception {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        Admin admin = conn.getAdmin();
+        //创建表名对象
+        TableName tableName = TableName.valueOf("ns2:t2");
+        //创建表描述符对象
+        HTableDescriptor tbl = new HTableDescriptor(tableName);
+        //创建列族描述符
+        HColumnDescriptor col = new HColumnDescriptor("f1");
+        tbl.addFamily(col);
+
+        admin.createTable(tbl);
+        System.out.println("over");
+    }
+
+    @Test
+    public void disableTable() throws Exception {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        Admin admin = conn.getAdmin();
+        //禁用表 enable(...) disableTable(...)
+        admin.deleteTable(TableName.valueOf("ns2:t2"));
+    }
+
+
+    @Test
+    public void deleteData() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+
+        Table table = conn.getTable(tname);
+        Delete del = new Delete(Bytes.toBytes("row0001"));
+        del.addColumn(Bytes.toBytes("f1"),Bytes.toBytes("id"));
+        del.addColumn(Bytes.toBytes("f1"),Bytes.toBytes("name"));
+        table.delete(del);
+        System.out.println("over");
+    }
+
+    /**
+     * 删除数据
+     */
+    @Test
+    public void scan() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Table table = conn.getTable(tname);
+        Scan scan = new Scan();
+        scan.setStartRow(Bytes.toBytes("row5000"));
+        scan.setStopRow(Bytes.toBytes("row8000"));
+        ResultScanner rs = table.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            System.out.println(Bytes.toString(name));
+        }
+    }
+
+    /**
+     * 动态遍历
+     */
+    @Test
+    public void scan2() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Table table = conn.getTable(tname);
+        Scan scan = new Scan();
+        scan.setStartRow(Bytes.toBytes("row5000"));
+        scan.setStopRow(Bytes.toBytes("row8000"));
+        ResultScanner rs = table.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            Map<byte[],byte[]> map = r.getFamilyMap(Bytes.toBytes("f1"));
+            for(Map.Entry<byte[],byte[]> entrySet : map.entrySet()){
+                String col = Bytes.toString(entrySet.getKey());
+                String val = Bytes.toString(entrySet.getValue());
+                System.out.print(col + ":" + val + ",");
+            }
+
+            System.out.println();
+        }
+    }
+
+    /**
+     * 动态遍历
+     */
+    @Test
+    public void scan3() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Table table = conn.getTable(tname);
+        Scan scan = new Scan();
+        scan.setStartRow(Bytes.toBytes("row5000"));
+        scan.setStopRow(Bytes.toBytes("row8000"));
+        ResultScanner rs = table.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            //得到一行的所有map,key=f1,value=Map<Col,Map<Timestamp,value>>
+            NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = r.getMap();
+            //
+            for(Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : map.entrySet()){
+                //得到列族
+                String f = Bytes.toString(entry.getKey());
+                Map<byte[], NavigableMap<Long, byte[]>> colDataMap = entry.getValue();
+                for(Map.Entry<byte[], NavigableMap<Long, byte[]>> ets : colDataMap.entrySet() ){
+                    String c = Bytes.toString(ets.getKey());
+                    Map<Long, byte[]> tsValueMap = ets.getValue();
+                    for(Map.Entry<Long,byte[]> e : tsValueMap.entrySet()){
+                        Long ts = e.getKey() ;
+                        String value = Bytes.toString(e.getValue());
+                        System.out.print(f+":"+c+":"+ts+"=" +value + ",");
+                    }
+                }
+            }
+            System.out.println();
+        }
     }
 }
