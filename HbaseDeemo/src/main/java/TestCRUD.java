@@ -9,6 +9,7 @@ import javax.naming.Name;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 
@@ -259,6 +260,30 @@ public class TestCRUD {
                 }
             }
             System.out.println();
+        }
+    }
+
+    /***
+     * 按指定版本数获取数据
+     * @throws IOException
+     */
+    @Test
+    public void getWithVersions() throws IOException {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t3");
+        Table table = conn.getTable(tname);
+        Get get = new Get(Bytes.toBytes("row1"));
+        //检索所有版本
+        get.setMaxVersions();
+        Result r = table.get(get);
+        List<Cell> cells = r.getColumnCells(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+        for(Cell c : cells){
+            String f = Bytes.toString(c.getFamily());
+            String col = Bytes.toString(c.getQualifier());
+            long ts = c.getTimestamp();
+            String val = Bytes.toString(c.getValue());
+            System.out.println(f + "/" + col + "/" + ts + "=" + val);
         }
     }
 }
