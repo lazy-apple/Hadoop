@@ -134,6 +134,45 @@ public class TestCRUD {
         System.out.println(System.currentTimeMillis() - start);
     }
 
+    /**
+     * 测试缓存和批处理
+     */
+    @Test
+    public void testBatchAndCaching() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+        scan.setCaching(2);
+        scan.setBatch(4);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            System.out.println("========================================");
+            //得到一行的所有map,key=f1,value=Map<Col,Map<Timestamp,value>>
+            NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> map = r.getMap();
+            //
+            for (Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> entry : map.entrySet()) {
+                //得到列族
+                String f = Bytes.toString(entry.getKey());
+                Map<byte[], NavigableMap<Long, byte[]>> colDataMap = entry.getValue();
+                for (Map.Entry<byte[], NavigableMap<Long, byte[]>> ets : colDataMap.entrySet()) {
+                    String c = Bytes.toString(ets.getKey());
+                    Map<Long, byte[]> tsValueMap = ets.getValue();
+                    for (Map.Entry<Long, byte[]> e : tsValueMap.entrySet()) {
+                        Long ts = e.getKey();
+                        String value = Bytes.toString(e.getValue());
+                        System.out.print(f + "/" + c + "/" + ts + "=" + value + ",");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
     @Test
     public void createNameSpace() throws Exception {
         Configuration conf = HBaseConfiguration.create();
@@ -148,6 +187,7 @@ public class TestCRUD {
             System.out.println(n.getName());
         }
     }
+
     @Test
     public void listNameSpaces() throws Exception {
         Configuration conf = HBaseConfiguration.create();
@@ -201,7 +241,6 @@ public class TestCRUD {
         System.out.println("over");
     }
 
-
     @Test
     public void disableTable() throws Exception {
         Configuration conf = HBaseConfiguration.create();
@@ -210,7 +249,6 @@ public class TestCRUD {
         //禁用表 enable(...) disableTable(...)
         admin.deleteTable(TableName.valueOf("ns2:t2"));
     }
-
 
     @Test
     public void deleteData() throws IOException {
