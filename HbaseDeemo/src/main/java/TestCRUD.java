@@ -111,6 +111,29 @@ public class TestCRUD {
         return format;
     }
 
+    /***
+     *
+     * 使用扫描器缓存进行扫描
+     */
+    @Test
+    public void getScanCache() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Scan scan = new Scan();
+        scan.setCaching(5000);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        long start = System.currentTimeMillis();
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            System.out.println(r.getColumnLatestCell(Bytes.toBytes("f1"), Bytes.toBytes("name")));
+        }
+        System.out.println(System.currentTimeMillis() - start);
+    }
+
     @Test
     public void createNameSpace() throws Exception {
         Configuration conf = HBaseConfiguration.create();
