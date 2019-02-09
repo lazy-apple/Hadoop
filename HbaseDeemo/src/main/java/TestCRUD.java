@@ -154,6 +154,31 @@ public class TestCRUD {
         System.out.println("over");
     }
 
+    /***
+     * 创建表时带有ttl，和保留删除的cell
+     */
+    @Test
+    public void createTable2() throws Exception {
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        Admin admin = conn.getAdmin();
+        //创建表名对象
+        TableName tableName = TableName.valueOf("ns1:t5");
+        //创建表描述符对象
+        HTableDescriptor tbl = new HTableDescriptor(tableName);
+
+        //创建列族描述符
+        HColumnDescriptor col = new HColumnDescriptor("f1");
+        //保留删除的cell
+        col.setKeepDeletedCells(true);
+        col.setTimeToLive(20);
+        tbl.addFamily(col);
+
+        admin.createTable(tbl);
+        System.out.println("over");
+    }
+
+
     @Test
     public void disableTable() throws Exception {
         Configuration conf = HBaseConfiguration.create();
