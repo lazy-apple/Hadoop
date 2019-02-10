@@ -443,4 +443,34 @@ public class TestCRUD {
             System.out.println(f1id + " : " + f2id + " : " + f2name);
         }
     }
+
+
+    /**
+     * 测试ValueFilter(值过滤器)
+     * 过滤value的值，含有指定的字符子串（to）
+     */
+    @Test
+    public void testValueFilter() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+        ValueFilter filter = new ValueFilter(CompareFilter.CompareOp.EQUAL, new SubstringComparator("to"));
+        scan.setFilter(filter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f1name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + Bytes.toString(f1name) + " : " + Bytes.toString(f2name));
+        }
+    }
+
+
+
 }
