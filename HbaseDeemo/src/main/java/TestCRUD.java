@@ -674,7 +674,34 @@ public class TestCRUD {
         }
     }
 
+    /**
+     *正则表达式过滤，类似于sql的like
+     */
+    @Test
+    public void testLike() throws IOException {
 
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+
+        ValueFilter filter = new ValueFilter(CompareFilter.CompareOp.EQUAL,
+                new RegexStringComparator("^tom2")
+        );
+
+        scan.setFilter(filter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f1name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + Bytes.toString(f1name) + " : " + Bytes.toString(f2name));
+        }
+    }
 
 
 
