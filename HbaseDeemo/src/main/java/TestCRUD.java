@@ -703,7 +703,80 @@ public class TestCRUD {
         }
     }
 
+    /***
+     * 复杂查询
+     * select * from t7 where ((age <= 13) and (name like '%t')
+     *
+     * 										or
+     *
+     * 							(age > 13) and (name like 't%'))
+     */
+    @Test
+    public void testComboFilter() throws IOException {
 
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+
+        //where ... f2:age <= 13
+        SingleColumnValueFilter ftl = new SingleColumnValueFilter(
+                Bytes.toBytes("f2"),
+                Bytes.toBytes("age"),
+                CompareFilter.CompareOp.LESS_OR_EQUAL,
+                new BinaryComparator(Bytes.toBytes("13"))
+        );
+
+        //where ... f2:name like %t
+        SingleColumnValueFilter ftr = new SingleColumnValueFilter(
+                Bytes.toBytes("f2"),
+                Bytes.toBytes("name"),
+                CompareFilter.CompareOp.EQUAL,
+                new RegexStringComparator("^t")
+        );
+        //ft：and
+        FilterList ft = new FilterList(FilterList.Operator.MUST_PASS_ALL);
+        ft.addFilter(ftl);
+        ft.addFilter(ftr);
+
+        //where ... f2:age > 13
+        SingleColumnValueFilter fbl = new SingleColumnValueFilter(
+                Bytes.toBytes("f2"),
+                Bytes.toBytes("age"),
+                CompareFilter.CompareOp.GREATER,
+                new BinaryComparator(Bytes.toBytes("13"))
+        );
+
+        //where ... f2:name like %t
+        SingleColumnValueFilter fbr = new SingleColumnValueFilter(
+                Bytes.toBytes("f2"),
+                Bytes.toBytes("name"),
+                CompareFilter.CompareOp.EQUAL,
+                new RegexStringComparator("t$")
+        );
+        //ft：and
+        FilterList fb = new FilterList(FilterList.Operator.MUST_PASS_ALL);
+        fb.addFilter(fbl);
+        fb.addFilter(fbr);
+
+        //or
+        FilterList fall = new FilterList(FilterList.Operator.MUST_PASS_ONE);
+        fall.addFilter(ft);
+        fall.addFilter(fb);
+
+        scan.setFilter(fall);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f1name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + Bytes.toString(f1name) + " : " + Bytes.toString(f2name));
+        }
+    }
 
 
 
