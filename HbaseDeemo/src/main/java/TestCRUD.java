@@ -590,4 +590,32 @@ public class TestCRUD {
         }
     }
 
+    /**
+     * 分页过滤,是rowkey过滤,在region上扫描时，对每次page设置的大小。
+     * 返回到到client，涉及到每个Region结果的合并。
+     */
+    @Test
+    public void testPageFilter() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Scan scan = new Scan();
+
+        PageFilter filter = new PageFilter(10);
+
+        scan.setFilter(filter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f1name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + Bytes.toString(f1name) + " : " + Bytes.toString(f2name));
+        }
+    }
+
 }
