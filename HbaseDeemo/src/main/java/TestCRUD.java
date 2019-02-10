@@ -2,6 +2,9 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.BinaryComparator;
+import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
@@ -105,6 +108,7 @@ public class TestCRUD {
      *  正确方式是讲所有数值，不满位数的用0补齐。
      * @return
      */
+
     public static DecimalFormat formatNum(){
         DecimalFormat format = new DecimalFormat();
         format.applyLocalizedPattern("0000");
@@ -370,6 +374,28 @@ public class TestCRUD {
             long ts = c.getTimestamp();
             String val = Bytes.toString(c.getValue());
             System.out.println(f + "/" + col + "/" + ts + "=" + val);
+        }
+    }
+
+    /**
+     * 测试RowFilter过滤器
+     * 行过滤器，<= row0100
+     */
+    @Test
+    public void testRowFilter() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t1");
+        Scan scan = new Scan();
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.LESS_OR_EQUAL, new BinaryComparator(Bytes.toBytes("row0100")));
+        scan.setFilter(rowFilter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            System.out.println(Bytes.toString(r.getRow()));
         }
     }
 }
