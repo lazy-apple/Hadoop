@@ -535,5 +535,32 @@ public class TestCRUD {
         }
     }
 
+    /**
+     * 单列值排除过滤器,去掉过滤使用的列,对列的值进行过滤（符合条件的不显示）
+     */
+    @Test
+    public void testSingleColumValueExcludeFilter() throws IOException {
 
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+        SingleColumnValueExcludeFilter filter = new SingleColumnValueExcludeFilter(Bytes.toBytes("f2"),
+                Bytes.toBytes("name"),
+                CompareFilter.CompareOp.EQUAL,
+                new BinaryComparator(Bytes.toBytes("tom2.2")));
+
+        scan.setFilter(filter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f1name = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("name"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + Bytes.toString(f1name) + " : " + Bytes.toString(f2name));
+        }
+    }
 }
