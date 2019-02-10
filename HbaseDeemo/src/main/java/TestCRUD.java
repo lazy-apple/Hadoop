@@ -2,9 +2,7 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
-import org.apache.hadoop.hbase.filter.BinaryComparator;
-import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.apache.hadoop.hbase.filter.RowFilter;
+import org.apache.hadoop.hbase.filter.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
@@ -396,6 +394,53 @@ public class TestCRUD {
         while (it.hasNext()) {
             Result r = it.next();
             System.out.println(Bytes.toString(r.getRow()));
+        }
+    }
+
+    /**
+     * 测试FamilyFilter过滤器(列族过滤f2)
+     */
+    @Test
+    public void testFamilyFilter() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+        FamilyFilter filter = new FamilyFilter(CompareFilter.CompareOp.LESS, new BinaryComparator(Bytes.toBytes("f2")));
+        scan.setFilter(filter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            System.out.println(f1id + " : " + f2id);
+        }
+    }
+
+    /**
+     * 测试QualifierFilter(列过滤器：id)
+     */
+    @Test
+    public void testColFilter() throws IOException {
+
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t7");
+        Scan scan = new Scan();
+        QualifierFilter colfilter = new QualifierFilter(CompareFilter.CompareOp.EQUAL, new BinaryComparator(Bytes.toBytes("id")));
+        scan.setFilter(colfilter);
+        Table t = conn.getTable(tname);
+        ResultScanner rs = t.getScanner(scan);
+        Iterator<Result> it = rs.iterator();
+        while (it.hasNext()) {
+            Result r = it.next();
+            byte[] f1id = r.getValue(Bytes.toBytes("f1"), Bytes.toBytes("id"));
+            byte[] f2id = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("id"));
+            byte[] f2name = r.getValue(Bytes.toBytes("f2"), Bytes.toBytes("name"));
+            System.out.println(f1id + " : " + f2id + " : " + f2name);
         }
     }
 }
