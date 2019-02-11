@@ -778,7 +778,23 @@ public class TestCRUD {
         }
     }
 
+    /**
+     *测试计数器
+     */
+    @Test
+    public void testIncr() throws IOException {
 
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tname = TableName.valueOf("ns1:t8");
+        Table t = conn.getTable(tname);
+        Increment incr = new Increment(Bytes.toBytes("row1"));
+        incr.addColumn(Bytes.toBytes("f1"),Bytes.toBytes("daily"),1);
+        incr.addColumn(Bytes.toBytes("f1"),Bytes.toBytes("weekly"),10);
+        incr.addColumn(Bytes.toBytes("f1"),Bytes.toBytes("monthly"),100);
+        t.increment(incr);
+
+    }
 
 
 
