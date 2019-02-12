@@ -20,6 +20,7 @@ import java.util.Date;
  */
 public class Util {
     /***
+     * 向主叫表插入数据；
      * 设计rowkey，插入数据
      * @throws Exception
      */
