@@ -23,6 +23,11 @@ import java.util.List;
 public class CalleeLogRegionObserver extends BaseRegionObserver {
 
 
+    /***
+     * 协处理器：
+     * 用于在插入主叫数据后，插入被叫数据
+     * -需要在协处理器插入后进行判断，防止死掉
+     */
     public void postPut(ObserverContext<RegionCoprocessorEnvironment> e, Put put, WALEdit edit, Durability durability) throws IOException {
         FileWriter fw = new FileWriter("/home/centos/kkk.txt",true);
 
