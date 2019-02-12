@@ -38,14 +38,14 @@ public class CalleeLogRegionObserver extends BaseRegionObserver {
         String rowkey = Bytes.toString(put.getRow());
         String[] arr = rowkey.split(",");
 
-//        String hash = Util.getRegNo(arr[4],arr[2]);
-//        //hash
-//
-//        String newRowKey = hash + "," + arr[4] + "," + arr[2] + ",1," + arr[1] + "," +  arr[5] ;
-//        Put newPut = new Put(Bytes.toBytes(newRowKey));
-//
-//        Table t = e.getEnvironment().getTable(tableName);
-//
-//        t.put(newPut);
+        String hash = Util.getRegNo(arr[4],arr[2]);
+        //hash
+
+        String newRowKey = hash + "," + arr[4] + "," + arr[2] + ",1," + arr[1] + "," +  arr[5] ;
+        Put newPut = new Put(Bytes.toBytes(newRowKey));
+
+        Table t = e.getEnvironment().getTable(tableName);
+
+        t.put(newPut);
     }
 }
