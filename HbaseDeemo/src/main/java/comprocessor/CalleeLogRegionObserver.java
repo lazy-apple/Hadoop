@@ -19,7 +19,7 @@ import java.io.IOException;
 public class CalleeLogRegionObserver extends BaseRegionObserver {
     /***
      * 协处理器：
-     * 用于在主叫表插入数据后，向被叫表插入数据
+     * 用于在插入主叫数据后，插入被叫数据
      */
     public void postPut(ObserverContext<RegionCoprocessorEnvironment> e, Put put, WALEdit edit, Durability durability) throws IOException {
         super.postPut(e, put, edit, durability);
