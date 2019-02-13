@@ -39,6 +39,10 @@ public class TestCallLog {
         while (it.hasNext()){
             String row = Bytes.toString(it.next().getRow());
             System.out.println(row);
+
+            //使用协处理器，每次get数据后，判断主叫被叫
+            //主叫：获取列的信息
+            //被叫：主叫被叫互换位置，算hash得区域号，然后同上。
         }
 
     }
