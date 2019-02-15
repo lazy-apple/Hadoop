@@ -10,6 +10,7 @@
         <module name="HbaseDeemo" />
         <module name="HDFS" />
         <module name="HIVE" />
+        <module name="KafkaDemo" />
         <module name="MR" />
       </profile>
     </annotationProcessing>
@@ -18,6 +19,7 @@
       <module name="HbaseDeemo" target="6" />
       <module name="HDFS" target="1.5" />
       <module name="HIVE" target="1.5" />
+      <module name="KafkaDemo" target="1.5" />
       <module name="MR" target="1.5" />
     </bytecodeTargetLevel>
   </component>
