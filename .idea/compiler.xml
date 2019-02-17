@@ -12,6 +12,7 @@
         <module name="HIVE" />
         <module name="KafkaDemo" />
         <module name="MR" />
+        <module name="StormDemo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -21,6 +22,7 @@
       <module name="HIVE" target="1.5" />
       <module name="KafkaDemo" target="1.5" />
       <module name="MR" target="1.5" />
+      <module name="StormDemo" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
