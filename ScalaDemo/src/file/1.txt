@@ -1,0 +1,4 @@
+Hello World
+Tom
+！！！
+E:\IDEA_workspace\Hadoop\ScalaDemo\src\file
