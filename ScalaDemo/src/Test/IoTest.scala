@@ -45,13 +45,23 @@ object IoTest {
 //          case _ => print("……")
 //        }
 
-    //匹配数组
-        val arr = Array(0,1,2,3);
-        arr match {
-          case Array(0) => print("有0")
-          case Array(a,b) => print("两个元素")
-          case Array(0,_*) => print("以0开始")
-          case _ => print("……")
-        }
+//    //匹配数组
+//        val arr = Array(0,1,2,3);
+//        arr match {
+//          case Array(0) => print("有0")
+//          case Array(a,b) => print("两个元素")
+//          case Array(0,_*) => print("以0开始")
+//          case _ => print("……")
+//        }
+
+//    //元组与变量声明
+//    val t = (1,2,3,4)
+//    println(t _1)
+//    val t1 = (1,2,3)
+//    val (x,y,z) = t1
+//    println((x, y, z))
+
+    //隐式转换函数
+    implicit def in2Hello(n:Int) = Hello//int类型转换为Hello对象
   }
 }
