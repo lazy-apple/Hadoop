@@ -19,6 +19,7 @@ object Persist {
     })
     rdd2.persist(StorageLevel.DISK_ONLY)
     println(rdd2.reduce(_+_))
+    rdd1.unpersist();//删除持久化
     println(rdd2.reduce(_+_))
   }
 
