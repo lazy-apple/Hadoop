@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Eclipse" />
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -18,11 +19,8 @@
     <bytecodeTargetLevel>
       <module name="Hadoop" target="1.5" />
       <module name="HbaseDeemo" target="6" />
-      <module name="HDFS" target="1.5" />
-      <module name="HIVE" target="1.5" />
       <module name="KafkaDemo" target="1.5" />
-      <module name="MR" target="1.5" />
-      <module name="SparkDemo" target="1.5" />
+      <module name="SparkDemo" target="1.8" />
       <module name="StormDemo" target="1.5" />
     </bytecodeTargetLevel>
   </component>
