@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Maven: org.scala-lang:scala-library:2.13.0-M5-6e0cba7" type="Scala">
+    <properties>
+      <language-level>Scala_2_13</language-level>
+      <compiler-classpath>
+        <root url="file://$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.13.0-M5-6e0cba7/scala-compiler-2.13.0-M5-6e0cba7.jar" />
+        <root url="file://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.13.0-M5-6e0cba7/scala-library-2.13.0-M5-6e0cba7.jar" />
+        <root url="file://$MAVEN_REPOSITORY$/org/scala-lang/scala-reflect/2.13.0-M5-6e0cba7/scala-reflect-2.13.0-M5-6e0cba7.jar" />
+      </compiler-classpath>
+    </properties>
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.13.0-M5-6e0cba7/scala-library-2.13.0-M5-6e0cba7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.13.0-M5-6e0cba7/scala-library-2.13.0-M5-6e0cba7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.13.0-M5-6e0cba7/scala-library-2.13.0-M5-6e0cba7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

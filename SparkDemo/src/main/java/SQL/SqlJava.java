@@ -7,6 +7,7 @@ import org.apache.spark.sql.*;
 import java.util.function.Consumer;
 
 /**
+ *
  * @author LaZY(李志一)
  * @create 2019-02-25 19:45
  */
@@ -33,7 +34,7 @@ public class SqlJava {
         dfCount.show();
 
 
-//        DataFrame和RDD互操作
+//      DataFrame和RDD互操作
         JavaRDD<Row> rdd = df.toJavaRDD();
         rdd.collect().forEach(new Consumer<Row>() {
             public void accept(Row row) {
@@ -43,7 +44,7 @@ public class SqlJava {
                 System.out.println(age + "," + id + "," + name);
             }
         });
-        //保存处理,设置保存模式
+        //保存处理,设置保存模式（追加）
         df2.write().mode(SaveMode.Append).json("file:///d:/scala/json/out.dat");
 
     }
