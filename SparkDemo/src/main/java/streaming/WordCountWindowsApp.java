@@ -45,6 +45,5 @@ public class WordCountWindowsApp {
         JavaStreamingContext context = JavaStreamingContext.getOrCreate("file:///", contextFunction);
         context.start();
         context.awaitTermination();
-
     }
 }
