@@ -1,11 +1,14 @@
+package core
+
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.util.Random
 
 /**
   * 单词统计（解决数据倾斜问题）
-  * @author LaZY(李志一) 
-  * @create 2019-02-22 16:18 
+ *
+  * @author LaZY(李志一)
+  * @create 2019-02-22 16:18
   */
 object DataLeanDemo1 {
   def main(args: Array[String]): Unit = {

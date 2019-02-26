@@ -1,10 +1,10 @@
-package main.java
+package core
 
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * @author LaZY(李志一) 
-  * @create 2019-02-21 21:54 
+  * @create 2019-02-21 21:54
   */
 object WordCount {
   def main(args: Array[String]): Unit = {
