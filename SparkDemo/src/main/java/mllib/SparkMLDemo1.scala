@@ -1,6 +1,7 @@
 package mllib
 
 /**
+  * 机器学习：酒质量预测
   * @author LaZY(李志一) 
   * @create 2019-02-26 23:15 
   */
@@ -61,9 +62,9 @@ object SparkMLDemo1 {
     val tested = model.transform(testDF).select("features", "label", "prediction");
     tested.show();
 
-    //模型持久化
-    model.save("file:///d:/scala/model");//模型保存
-    val mode = LinearRegressionModel.load("");//加载
+//    //模型持久化
+//    model.save("file:///d:/scala/model");//模型保存
+//    val mode = LinearRegressionModel.load("");//加载
 
   }
 }
