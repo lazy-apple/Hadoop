@@ -5,7 +5,7 @@ package mllib
   * @create 2019-02-26 23:15 
   */
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.ml.regression.{LinearRegression, LinearRegressionModel}
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.sql.{Row, SparkSession}
@@ -60,6 +60,10 @@ object SparkMLDemo1 {
     //利用model对测试数据进行变化，得到新数据框，查询features", "label", "prediction方面值。
     val tested = model.transform(testDF).select("features", "label", "prediction");
     tested.show();
+
+    //模型持久化
+    model.save("file:///d:/scala/model");//模型保存
+    val mode = LinearRegressionModel.load("");//加载
 
   }
 }
