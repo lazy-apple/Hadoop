@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Hadoop.iml" filepath="$PROJECT_DIR$/.idea/Hadoop.iml" />
       <module fileurl="file://$PROJECT_DIR$/HbaseDeemo/HbaseDeemo.iml" filepath="$PROJECT_DIR$/HbaseDeemo/HbaseDeemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/KafkaDemo/KafkaDemo.iml" filepath="$PROJECT_DIR$/KafkaDemo/KafkaDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Python/Python.iml" filepath="$PROJECT_DIR$/Python/Python.iml" />
       <module fileurl="file://$PROJECT_DIR$/PythonDemo/PythonDemo.iml" filepath="$PROJECT_DIR$/PythonDemo/PythonDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/ScalaDemo/ScalaDemo.iml" filepath="$PROJECT_DIR$/ScalaDemo/ScalaDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/SparkDemo/SparkDemo.iml" filepath="$PROJECT_DIR$/SparkDemo/SparkDemo.iml" />
