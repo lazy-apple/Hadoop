@@ -77,5 +77,10 @@
             <artifactId>spark-mllib_2.11</artifactId>
             <version>2.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.24</version>
+        </dependency>
     </dependencies>
 </project>
