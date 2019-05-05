@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/ScalaDemo/ScalaDemo.iml" filepath="$PROJECT_DIR$/ScalaDemo/ScalaDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/SparkDemo/SparkDemo.iml" filepath="$PROJECT_DIR$/SparkDemo/SparkDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/StormDemo/StormDemo.iml" filepath="$PROJECT_DIR$/StormDemo/StormDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/longzhi/longzhi.iml" filepath="$PROJECT_DIR$/longzhi/longzhi.iml" />
     </modules>
   </component>
 </project>

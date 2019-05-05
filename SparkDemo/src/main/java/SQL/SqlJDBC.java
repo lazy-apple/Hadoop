@@ -9,7 +9,7 @@ import org.apache.spark.sql.SparkSession;
 import java.util.Properties;
 
 /**
- * jdbc
+ * sparkSQL连接jdbc做查询和写入
  * @author LaZY(李志一)
  * @create 2019-02-26 9:27
  */
@@ -33,20 +33,21 @@ public class SqlJDBC {
                             .load();
         df.show();
 //        //投影查询
-//        Dataset<Row> df2 = df.select(new Column("name"),new Column("phone"));
+        Dataset<Row> df2 = df.select(new Column("id"));
+        df2.show();
 //        //过滤
-//        df2 = df2.where("phone like '135%'");
+        df2 = df2.where("age like '%3'");
 //        //去重
-//        df2 = df2.distinct();
+        df2 = df2.distinct();
 
-
+        //写入
         Properties prop = new Properties();
         prop.put("user", "root");
         prop.put("password", "root");
         prop.put("driver", "com.mysql.jdbc.Driver");
 
-        //写入
+
         df.write().jdbc(url,"subpersons",prop);
-        df.show();
+//        df.show();
     }
 }

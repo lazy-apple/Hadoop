@@ -25,7 +25,7 @@ public class Test {
         Configuration conf = new Configuration();
         conf.set("fs.defaultFS","file:///");
         FileSystem fs = FileSystem.get(conf);
-        Path p = new Path("h:/mr/maxtemp/1.seq");
+        Path p = new Path("e:/mr/maxtemp/1.seq");
         SequenceFile.Writer writer = SequenceFile.createWriter(fs,conf,p,IntWritable.class,IntWritable.class);
         for(int i = 0;i< 6000;i++){
             int year = 1970 + new Random().nextInt(100);
